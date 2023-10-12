@@ -64,7 +64,7 @@ async function run() {
             const result = await toysCollection.insertOne(newItem);
             res.send(result);
         })
-        
+
 
         app.put("/toys/:id", async (req, res) => {
             const id = req.params.id;
@@ -73,10 +73,8 @@ async function run() {
             const options = { upsert: true };
             const updateMenu = {
                 $set: {
-
-                    name: updateToy.name,
-                    price: updateToy.price,
                     quantity: updateToy.quantity,
+                    price: updateToy.price,
                     description: updateToy.description
                 },
             }
