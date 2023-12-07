@@ -1,10 +1,11 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
-const app = express();
 const cors = require('cors');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const app = express();
 const port = process.env.PORT || 5000;
 
+// Middleware 
 app.use(cors());
 app.use(express.json());
 
@@ -20,20 +21,14 @@ const client = new MongoClient(uri, {
     }
 });
 
+
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         // const usersCollection = await client.db("educationalToysDB").collection("users");
         const toysCollection = await client.db("educationalToysDB").collection("toys")
-
-
-        
-    //    app.get("users/:id", async (req, res) =>{
-    //         const user = await
-    //    }) 
-
 
 
         app.get("/alltoys", async (req, res) => {
@@ -48,10 +43,12 @@ async function run() {
             res.send(result)
         })
 
-        app.get("/singletoy", async(req, res) =>{
+        app.get("/singletoy", async (req, res) => {
             let query = {}
-            if (req?.query?.sellerEmail) {query = {
-                    sellerEmail: req?.query?.sellerEmail }
+            if (req?.query?.sellerEmail) {
+                query = {
+                    sellerEmail: req?.query?.sellerEmail
+                }
 
             }
             const result = await toysCollection.find(query).toArray()
@@ -107,12 +104,12 @@ async function run() {
 
         app.get('/toys/lowprice', async (req, res) => {
             const toys = await toysCollection.find().sort({ price: 1 });
-            res.json(toys); 
+            res.json(toys);
         });
 
         app.get('/toys/highprice', async (req, res) => {
-            const toys = await toysCollection.find().sort({ price: -1 }); 
-                res.json(toys);
+            const toys = await toysCollection.find().sort({ price: -1 });
+            res.json(toys);
         });
 
 
